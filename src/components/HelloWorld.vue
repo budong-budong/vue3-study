@@ -1,58 +1,58 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
+  <div>
+    <h1>注意 在setup函数中 无法访问到this!!!</h1>
+    <h1>使用reactive绑定数据</h1>
+    <p>{{state.msg}}</p>
+    <p>{{info}}</p>
     <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
+      <button @click="changeMsg">changemsg</button>
     </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <father ref="father"></father>
+    <ref></ref>
+    <h1>
+      本章小结
+    </h1>
+    <h3>reactive</h3>
+    <ol>
+      <li>reactive方法，直接传入一个对象state，这个对象就是proxy拦截的对象</li>
+      <li>然后再把这个state对象直接return出去就能被调用</li>
+      <li>在temolate中使用state.msg来访问</li>
+      <li>在js中也使用state.msg来访问</li>
+    </ol>
+    <h3>ref</h3>
+    <ol>
+      <li>使用ref直接声明一个proxy响应式对象msg</li>
+      <li>然后把这个msg对象直接return出去</li>
+      <li>在template中直接使用'{{msg}}'</li>
+      <li>注意：在js中需要使用msg.value</li>
+    </ol>
   </div>
 </template>
 
 <script>
-export default {
+import ref from '../pages/ref/index'
+import father from '../pages/fatherAndSon/father'
+import { defineComponent,reactive } from 'vue'
+export default defineComponent({
+  components: { father,ref },
   name: 'HelloWorld',
-  props: {
-    msg: String
+  setup(){
+    const state = reactive({
+      msg:'时光'
+    })
+    let info = 'hello'
+    const changeMsg = () =>{
+      state.msg = '时光，你好'
+      info = 'hello 你好'
+    }
+    return{ //使用时，要把对象return出去，才能使用
+      state,
+      info,
+      changeMsg
+    }
   }
-}
+})
+
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
+
